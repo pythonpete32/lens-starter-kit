@@ -1,4 +1,6 @@
-const CLAIM_HANDLE = `
+import { gql } from '@apollo/client';
+
+const CLAIM_HANDLE = gql`
   mutation($request: ClaimHandleRequest!) { 
     claim(request: $request) {
       ... on RelayerResult {
@@ -12,7 +14,7 @@ const CLAIM_HANDLE = `
  }
 `;
 
-const CLAIMED_HANDLES = `
+const CLAIMED_HANDLES = gql`
   query {
     claimedHandles {
       id
@@ -23,7 +25,7 @@ const CLAIMED_HANDLES = `
   }
 `;
 
-const CLAIMABLE_HANDLES = `
+const CLAIMABLE_HANDLES = gql`
   query {
     claimableHandles {
       id

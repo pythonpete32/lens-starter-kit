@@ -1,14 +1,13 @@
-import { proxy } from 'valtio'
+import { proxy, subscribe } from 'valtio'
 
 const state = proxy(
   {
     // state variables
+    profiles: [],
     isAuthenticated: false,
-    // state methods
-    setProfiles: () => { },
-    setIsAuthenticated: () => { },
-    setCurrentUser: () => { },
-
+    currentUser: null,
   })
+
+
 
 export { state }

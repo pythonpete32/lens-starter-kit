@@ -1,12 +1,12 @@
+import { gql } from '@apollo/client';
 
-
-const CHALLENGE_QUERY = `
+const CHALLENGE_QUERY = gql`
   query($request: ChallengeRequest!) {
     challenge(request: $request) { text }
   }
 `;
 
-const AUTHENTICATE_MUTATION = `
+const AUTHENTICATE_MUTATION = gql`
   mutation($request: SignedAuthChallenge!) { 
     authenticate(request: $request) {
       accessToken
@@ -15,7 +15,7 @@ const AUTHENTICATE_MUTATION = `
  }
 `;
 
-const REFRESH_AUTHENTICATION = `
+const REFRESH_AUTHENTICATION = gql`
   mutation($request: RefreshRequest!) { 
     refresh(request: $request) {
       accessToken
@@ -24,7 +24,7 @@ const REFRESH_AUTHENTICATION = `
  }
 `;
 
-const VERIFY = `
+const VERIFY = gql`
   query($request: VerifyRequest!) {
     verify(request: $request)
   }
