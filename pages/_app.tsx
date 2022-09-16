@@ -10,7 +10,6 @@ import { apolloClient } from '../src/apollo-client';
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
-    chain.mainnet,
     chain.polygonMumbai,
     chain.polygon,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
