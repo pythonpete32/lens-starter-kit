@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import WalletConnector from '../components/WalletConnector';
+import { Toaster } from 'react-hot-toast';
 
 const Home: NextPage = () => {
   return (
@@ -15,6 +16,10 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+      />
       <div className="navbar bg-base-100">
         <div className="navbar-start">
           <div className="dropdown">
