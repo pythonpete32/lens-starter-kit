@@ -171,7 +171,7 @@ const WalletConnector: FC = () => {
             onClick={handleSign}
           >Sign in 🗳️</button>)
           : (<button
-            className='btn btn-md glass btn-secondary rounded-lg '
+            className='btn btn-md h shadow-lg glass btn-secondary rounded-lg '
             // disabled
             onClick={handleSign}
           >Sign in 🗳️</button>)
