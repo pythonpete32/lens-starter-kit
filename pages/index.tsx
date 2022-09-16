@@ -8,6 +8,19 @@ import NewProfileModal from '../components/NewProfileModal';
 import { useSnapshot } from 'valtio';
 import { state } from '../src/state';
 import { useEffect } from 'react';
+import { PostStatusCard } from '../components/PostStatusCard';
+
+{/* <div className="max-w-screen-md mx-auto bg-white rounded-lg shadow-md p-6 my-4">
+<textarea
+  className="w-full h-24 p-2 border rounded-lg focus:outline-none focus:border-blue-500"
+  placeholder="What's on your mind?"
+/>
+<div className="flex justify-end mt-2">
+  <button className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded hover:bg-gray-800">
+    Post
+  </button>
+</div>
+</div> */}
 
 
 const Home: NextPage = () => {
@@ -33,25 +46,14 @@ const Home: NextPage = () => {
       />
       <Navbar />
 
-      {/* body */}
+
 
       <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Hello Frens</h1>
-            <p className="py-6">Claim your lens handle.</p>
-            <div className='flex space-x-6'>
-              <NewProfileModal />
-              <select className="select select-bordered  w-7/12 max-w-xs">
-                <option disabled selected>Your Handles</option>
-                {snap.profiles.map((p, i) => (
-                  <option key={i}>{p?.handle}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+        <div className="w-10/12 text-center">
+          <PostStatusCard />
         </div>
       </div>
+
 
 
       <footer className="footer items-center p-4 bg-neutral text-neutral-content">
@@ -66,7 +68,7 @@ const Home: NextPage = () => {
           <a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="fill-current"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path></svg></a>
         </div>
       </footer>
-    </div>
+    </div >
   );
 };
 
