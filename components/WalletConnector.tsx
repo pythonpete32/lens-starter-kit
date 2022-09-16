@@ -33,9 +33,7 @@ const ERROR = {
 }
 
 const WalletConnector: FC = () => {
-  const [isShowing, setIsShowing] = useState(false)
-
-  let { profiles, isAuthenticated, currentUser } = useSnapshot(state);
+  const snap = useSnapshot(state)
   const { address } = useAccount();
   const { signMessageAsync, isLoading: signLoading } = useSignMessage({
     onError(error) {
@@ -83,17 +81,18 @@ const WalletConnector: FC = () => {
         variables: { request: { address, signature } },
       });
 
-      // if (auth?.data?.authenticate?.token !== null) toast.success("Authenticated with Lens!");
-      Cookies.set(
-        "accessToken",
-        auth.data.authenticate.accessToken,
-        // COOKIE_CONFIG
-      );
-      Cookies.set(
-        "refreshToken",
-        auth.data.authenticate.refreshToken,
-        // COOKIE_CONFIG
-      );
+      if (auth?.data?.authenticate?.token !== null) {
+        state.isAuthenticated = true;
+        Cookies.set(
+          "accessToken",
+          auth.data.authenticate.accessToken,
+        );
+        Cookies.set(
+          "refreshToken",
+          auth.data.authenticate.refreshToken,
+        );
+      }
+
 
       console.log("Address", address);
       const request = { ownedBy: address }
@@ -114,10 +113,10 @@ const WalletConnector: FC = () => {
           ?.sort((a: Profile, b: Profile) =>
             !(a.isDefault !== b.isDefault) ? 0 : a.isDefault ? -1 : 1
           );
-        state.isAuthenticated = true;
-        console.log("Authenticated???", isAuthenticated)
         state.profiles = profiles;
-        // state.currentUser = profiles[0];
+        state.currentUser = profiles[0];
+        console.log("latest profile from handle sign", profiles[0]);
+        // console.log("all profiles from handle sign", profiles);
       }
     } catch (error) {
       toast(error?.message, ERROR);
@@ -126,14 +125,14 @@ const WalletConnector: FC = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (snap.isAuthenticated) {
       (async function () {
         try {
           const { data: profilesData } = await getProfiles({
             variables: { request: { ownedBy: address } },
           });
-
           if (profilesData?.profiles?.items?.length === 0) {
+            console.log("No profiles");
             state.profiles = []
           } else {
             const profiles = profilesData?.profiles?.items
@@ -142,6 +141,7 @@ const WalletConnector: FC = () => {
               ?.sort((a: Profile, b: Profile) =>
                 !(a.isDefault !== b.isDefault) ? 0 : a.isDefault ? -1 : 1
               );
+            console.log("Profiles DATA (sorted)", profiles);
             state.profiles = profiles;
             state.currentUser = profiles[0];
           }
@@ -151,53 +151,33 @@ const WalletConnector: FC = () => {
       })();
     }
   }, [
-    isAuthenticated,
+    snap.isAuthenticated,
     address,
-    currentUser,
-    // profiles,
   ]);
-
-
-  // if is not authenticated , show both buttons 
 
   return (
     <div className="flex gap-4 flex-col sm:flex-row items-center justify-center" >
-
       <Transition
         as={Fragment}
-        // show={!isAuthenticated}
-        // enter="transform transition duration-[400ms]"
-        // enterFrom="opacity-0 rotate-[-120deg] scale-50"
-        // enterTo="opacity-100 rotate-0 scale-100"
-        // leave="transform duration-200 transition ease-in-out"
-        // leaveFrom="opacity-100 rotate-0 scale-100 "
-        // leaveTo="opacity-0 scale-95 "
-        show={!isAuthenticated}
-        // enter="transition-opacity duration-700"
-        // enterFrom="opacity-0"
-        // enterTo="opacity-100"
+        show={!snap.isAuthenticated}
         leave="transform duration-200 transition ease-in-out"
-        // leave="transition-opacity duration-18400"
         leaveFrom="opacity-100"
         leaveTo="opacity-0 scale-50"
       >
         {signLoading || challenegeLoading || authLoading || profilesLoading
           ? (<button
-            className='btn glass btn-primary rounded-lg h-3 loading'
+            className='btn btn-md glass btn-secondary rounded-lg h-0.5 loading'
             disabled
             onClick={handleSign}
           >Sign in 🗳️</button>)
           : (<button
-            className='btn glass btn-primary rounded-lg h-3'
+            className='btn btn-md h shadow-lg glass btn-secondary rounded-lg '
             // disabled
             onClick={handleSign}
           >Sign in 🗳️</button>)
         }
       </Transition>
-
-
-
-      <ConnectButton chainStatus={"none"} accountStatus='address' />
+      <ConnectButton chainStatus='icon' accountStatus='full' showBalance={false} />
     </div >
   );
 }

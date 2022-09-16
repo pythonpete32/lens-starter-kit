@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import type { AppProps } from 'next/app';
-import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, getDefaultWallets, darkTheme, lightTheme, ConnectButton } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
@@ -10,7 +10,6 @@ import { apolloClient } from '../src/apollo-client';
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
-    chain.mainnet,
     chain.polygonMumbai,
     chain.polygon,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
@@ -43,7 +42,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider chains={chains} theme={lightTheme(
+          {
+            accentColor: '#e9b649e1',
+            borderRadius: 'medium',
+            overlayBlur: 'large',
+          }
+        )} coolMode>
           <Component {...pageProps} />
         </RainbowKitProvider>
       </WagmiConfig>
