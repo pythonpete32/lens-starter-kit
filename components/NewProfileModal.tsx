@@ -1,8 +1,58 @@
+import React, { Fragment, FC, useEffect, useState } from "react";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { CLAIM_HANDLE } from "../src/gql/Handle";
+import { GET_PROFILES } from "../src/gql/User";
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import toast from "react-hot-toast";
+
+import { useSnapshot } from 'valtio'
+import { state } from "../src/state";
+import { useAccount } from "wagmi";
+
+const TOAST = {
+  style: {
+    borderRadius: '10px',
+    background: '#333',
+    color: '#fff',
+  },
+}
+
+const WARNING = {
+  ...TOAST, icon: 'ℹ️',
+}
+
+const SUCCESS = {
+  ...TOAST, icon: '✅',
+}
+
+const ERROR = {
+  ...TOAST, icon: '❌',
+}
+
 
 export default function MyModal() {
+  let { isAuthenticated } = useSnapshot(state);
+
+  const { address } = useAccount();
   let [isOpen, setIsOpen] = useState(false)
+  const [handle, setHandle] = useState('')
+  const [claimed, setClaimed] = useState(false)
+
+  const [claimHandle, { error: errorClaimHandle, loading: claimHandleLoading }] =
+    useMutation(CLAIM_HANDLE, {
+      onCompleted: (data) => {
+        console.log("Handle Claimed: ", data)
+        toast(`Claimed: ${handle} `, SUCCESS);
+        setClaimed(true)
+      },
+    })
+
+  const [getProfiles, { error: errorProfiles, loading: profilesLoading }] =
+    useLazyQuery(GET_PROFILES, {
+      onCompleted() {
+        console.log("Get Profiles", `Got Profiles`);
+      },
+    });
 
   function closeModal() {
     setIsOpen(false)
@@ -12,12 +62,58 @@ export default function MyModal() {
     setIsOpen(true)
   }
 
+  const handleRegisterNewUser = async () => {
+    try {
+      toast("Claiming...", WARNING)
+      closeModal()
+      const { data } = await claimHandle({
+        variables: {
+          request: { handle },
+        },
+      })
+      console.log(data)
+
+    } catch (error) {
+      console.log(error)
+      toast(error?.message, ERROR);
+    }
+  }
+
+  useEffect(() => {
+    console.log("in useEffect after claimed", handle)
+    if (isAuthenticated) {
+      (async function () {
+        try {
+          const { data: profilesData } = await getProfiles({
+            variables: { request: { ownedBy: address } },
+          });
+          if (profilesData?.profiles?.items?.length === 0) {
+            console.log("No profiles");
+            state.profiles = []
+          } else {
+            const profiles = profilesData?.profiles?.items
+              ?.slice()
+              ?.sort((a, b) => Number(a.id) - Number(b.id))
+              ?.sort((a, b) =>
+                !(a.isDefault !== b.isDefault) ? 0 : a.isDefault ? -1 : 1
+              );
+            console.log("Profiles DATA (sorted)", profiles);
+            state.profiles = profiles;
+            state.currentUser = profiles[0];
+          }
+        } catch (e) {
+          console.log("Fetch profile Error", e);
+        }
+      })();
+    }
+  }, [claimed])
+
   return (
     <>
       <button
         type="button"
         onClick={openModal}
-        className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        className="btn btn-accent btn-outline shadow-xxl"
       >
         Claim Lens handle
       </button>
@@ -68,26 +164,13 @@ export default function MyModal() {
                                 id="lens-handle"
                                 className="rounded-l-md block w-full min-w-0 flex-1 rounded-none  border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 placeholder="msgD0tsender"
+                                onChange={(e) => setHandle(e.target.value)}
                               />
                               <span className="inline-flex items-center  rounded-r-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
                                 .lens
                               </span>
 
                             </div>
-
-                            {/* <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                              Handle
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                              />
-                            </div> */}
                           </div>
 
                           <div>
@@ -147,7 +230,7 @@ export default function MyModal() {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                      onClick={() => handleRegisterNewUser()}
                     >
                       Register
                     </button>

@@ -5,9 +5,18 @@ import styles from '../styles/Home.module.css';
 import { Toaster } from 'react-hot-toast';
 import { Navbar } from '../components/Navbar';
 import NewProfileModal from '../components/NewProfileModal';
+import { useSnapshot } from 'valtio';
+import { state } from '../src/state';
+import { useEffect } from 'react';
 
 
 const Home: NextPage = () => {
+  const snap = useSnapshot(state, { sync: true });
+
+  useEffect(() => {
+
+  }, [snap.profiles]);
+
   return (
     <div>
       <Head>
@@ -29,10 +38,17 @@ const Home: NextPage = () => {
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content text-center">
           <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Hello there</h1>
-            <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-
-            <NewProfileModal />
+            <h1 className="text-5xl font-bold">Hello Frens</h1>
+            <p className="py-6">Claim your lens handle.</p>
+            <div className='flex space-x-6'>
+              <NewProfileModal />
+              <select className="select select-bordered  w-7/12 max-w-xs">
+                <option disabled selected>Your Handles</option>
+                {snap.profiles.map((p, i) => (
+                  <option key={i}>{p?.handle}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>
