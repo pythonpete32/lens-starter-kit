@@ -9,6 +9,7 @@ import { useSnapshot } from 'valtio';
 import { state } from '../src/state';
 import { useEffect } from 'react';
 import { PostStatusCard } from '../components/PostStatusCard';
+import { UserPostCard } from '../components/UserPostCard';
 
 {/* <div className="max-w-screen-md mx-auto bg-white rounded-lg shadow-md p-6 my-4">
 <textarea
@@ -50,7 +51,7 @@ const Home: NextPage = () => {
 
       <div className="hero min-h-screen bg-base-200">
         <div className="w-10/12 text-center">
-          <PostStatusCard />
+          <UserPostCard />
         </div>
       </div>
 
