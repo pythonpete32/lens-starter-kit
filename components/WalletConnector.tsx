@@ -197,7 +197,7 @@ const WalletConnector: FC = () => {
 
 
 
-      <ConnectButton chainStatus={"none"} accountStatus='address' />
+      <ConnectButton chainStatus={"none"} accountStatus='address' showBalance={false} />
     </div >
   );
 }
