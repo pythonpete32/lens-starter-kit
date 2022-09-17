@@ -9,19 +9,12 @@ import { useSnapshot } from 'valtio';
 import { state } from '../src/state';
 import { useEffect } from 'react';
 import { PostStatusCard } from '../components/PostStatusCard';
-import { UserPostCard } from '../components/UserPostCard';
+import { UserPostCard } from '../components/posts/singlePost/UserPostCard';
 
-{/* <div className="max-w-screen-md mx-auto bg-white rounded-lg shadow-md p-6 my-4">
-<textarea
-  className="w-full h-24 p-2 border rounded-lg focus:outline-none focus:border-blue-500"
-  placeholder="What's on your mind?"
-/>
-<div className="flex justify-end mt-2">
-  <button className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded hover:bg-gray-800">
-    Post
-  </button>
-</div>
-</div> */}
+import { PostFeedComponent } from '../components/posts/postFeedComponent/PostFeedComponent';
+import { FeedButtonLayout } from '../components/posts/common/FeedButtonLayout';
+
+
 
 
 const Home: NextPage = () => {
@@ -51,7 +44,50 @@ const Home: NextPage = () => {
 
       <div className="hero min-h-screen bg-base-200">
         <div className="w-10/12 text-center">
-          <UserPostCard />
+          <div className='grid grid-cols 2 gap2' >
+            <div className='col-span-1'>
+              {/* <UserPostCard
+                userName='User Name'
+                handle='@handle.lens'
+                avatar='https://placeimg.com/192/192/people'
+                date='08:36 PM · Sep 16, 2022'
+                collects='2'
+                comments='4'
+                likes='4'
+                mirrors='5'
+                content='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nisl nisl aliquet nunc, eget aliquam nisl nunc vel lorem. Sed euismod, nunc vel tincidunt lacinia, nisl nisl aliquet nunc, eget aliquam nisl nunc vel lorem.'
+              /> */}
+            </div>
+            <div>
+              <FeedButtonLayout></FeedButtonLayout>
+
+              <div className='py-6'>
+
+                <PostStatusCard />
+              </div>
+              <PostFeedComponent
+                userName='User Name'
+                handle='@Handle.lens'
+                status='2 hours ago'
+                content='ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nisl nisl aliquet nunc, eget aliquam nisl nunc vel lorem. Sed euismod, nunc vel tincidunt lacinia, nisl nisl aliquet nunc, eget aliquam nisl nunc vel lorem.'
+                position='TOP'
+              />
+              <PostFeedComponent
+                userName='User Name'
+                handle='@Handle.lens'
+                status='2 hours ago'
+                content='ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nisl nisl aliquet nunc, eget aliquam nisl nunc vel lorem. Sed euismod, nunc vel tincidunt lacinia, nisl nisl aliquet nunc, eget aliquam nisl nunc vel lorem.'
+                position='MIDDLE'
+              />
+              <PostFeedComponent
+                userName='User Name'
+                handle='@Handle.lens'
+                status='2 hours ago'
+                content='ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nisl nisl aliquet nunc, eget aliquam nisl nunc vel lorem. Sed euismod, nunc vel tincidunt lacinia, nisl nisl aliquet nunc, eget aliquam nisl nunc vel lorem.'
+                position='BOTTOM'
+              />
+            </div>
+          </div>
         </div>
       </div>
 

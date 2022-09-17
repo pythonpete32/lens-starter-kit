@@ -17,6 +17,7 @@
     "cross-fetch": "^3.1.5",
     "daisyui": "^2.27.0",
     "ethers": "^5.0.0",
+    "framer-motion": "^7.3.5",
     "gql": "^1.1.2",
     "graphql": "^16.6.0",
     "iron-session": "^6.2.1",

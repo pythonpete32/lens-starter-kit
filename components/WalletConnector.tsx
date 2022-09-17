@@ -6,7 +6,7 @@ import React, { Fragment, FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useAccount, useSignMessage } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Transition } from '@headlessui/react'
+import { motion } from 'framer-motion'
 
 import { useSnapshot } from 'valtio'
 import { state } from "../src/state";
@@ -34,7 +34,7 @@ const ERROR = {
 
 const WalletConnector: FC = () => {
   const snap = useSnapshot(state)
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { signMessageAsync, isLoading: signLoading } = useSignMessage({
     onError(error) {
       toast(error?.message, ERROR);
@@ -153,31 +153,43 @@ const WalletConnector: FC = () => {
   }, [
     snap.isAuthenticated,
     address,
+    isConnected
   ]);
+
+  console.log(
+    `signLoading: ${signLoading}, challenegeLoading: ${challenegeLoading}, authLoading: ${authLoading}, profilesLoading: ${profilesLoading}`
+  )
 
   return (
     <div className="flex gap-4 flex-col sm:flex-row items-center justify-center" >
-      <Transition
-        as={Fragment}
-        show={!snap.isAuthenticated}
-        leave="transform duration-200 transition ease-in-out"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0 scale-50"
+      <motion.div
+        animate={{
+          y: (!snap.isAuthenticated) ? 0 : 20,
+          opacity: (!snap.isAuthenticated) ? 1 : 0,
+          speed: 5,
+        }}
+        transition={{
+          delay: 1.5
+        }}
       >
         {signLoading || challenegeLoading || authLoading || profilesLoading
-          ? (<button
-            className='btn btn-md glass btn-secondary rounded-lg h-0.5 loading'
-            disabled
-            onClick={handleSign}
-          >Sign in 🗳️</button>)
-          : (<button
-            className='btn btn-md h shadow-lg glass btn-secondary rounded-lg '
-            // disabled
-            onClick={handleSign}
-          >Sign in 🗳️</button>)
+          ? (
+            <button
+              className='btn btn-md glass btn-secondary rounded-lg h-0.5 loading'
+              disabled
+              onClick={handleSign}
+            >Sign in 🗳️</button>
+          )
+          : (
+            <button
+              className='btn btn-md h shadow-lg glass btn-secondary rounded-lg '
+              // disabled
+              onClick={handleSign}
+            >Sign in 🗳️</button>
+          )
         }
-      </Transition>
-      <ConnectButton chainStatus='icon' accountStatus='full' showBalance={false} />
+      </motion.div>
+      <ConnectButton chainStatus='none' accountStatus='full' showBalance={false} />
     </div >
   );
 }

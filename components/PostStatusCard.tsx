@@ -1,7 +1,7 @@
 export function PostStatusCard() {
   return (
     // create a card with max width of screen, a slight boarder, some shadow and margin, give it a text inpur and a button to post the status
-    <div className="card card-compact w-full bg-base-300 shadow-2xl p-2">
+    <div className="card card-compact w-full bg-base-300 shadow-xl ring-base-100 ring-2 p-2">
       <div className="card-body">
         <textarea className="w-full h-24 p-2 border bg-base-100 rounded-lg focus:outline-none focus:border-blue-500" placeholder="What's poppin fam?" />
 
