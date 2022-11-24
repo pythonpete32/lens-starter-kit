@@ -1,17 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-sono)'],
+      },
+    },
   },
   daisyui: {
-    themes: ["bumblebee"],
+    themes: ['dracula'],
   },
-  plugins: [
-    require("daisyui"),
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('daisyui'), require('@tailwindcss/forms')],
 }

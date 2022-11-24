@@ -1,6 +1,7 @@
-This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](https://github.com/rainbow-me/rainbowkit/tree/main/packages/create-rainbowkit).
+This is a [Biconomy](https://biconomy.io) [Next.js](https://nextjs.org/) + [wagmi](https://wagmi.sh) Boilerplate
 
 ## Stack
+
 - Tailwind CSS
 - Next.js
 - TypeScript
@@ -10,7 +11,13 @@ This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Ne
 
 ## Getting Started
 
-First, run the development server:
+First, copy the `.env.example` to `.env.local` and add your [Alchemy](https://dashboard.alchemy.com/) key
+
+```bash
+cp .env.example .env.local
+```
+
+Then, run the development server:
 
 ```bash
 pnpm run dev
